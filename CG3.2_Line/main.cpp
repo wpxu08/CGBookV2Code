@@ -1,4 +1,4 @@
-Ôªø#include  <GL/glut.h> 
+#include  <GL/glut.h> 
 #include <algorithm> 
 
 using namespace std;
@@ -13,9 +13,9 @@ void line(int x0, int y0, int x1, int y1)
 
 	int dx = abs(x1 - x0);
 	int dy = abs(y1 - y0);
-	if(dx > dy) // xÊñπÂêë‰∏∫Ê≠•ËøõÊñπÂêë
+	if (dx > dy) // x∑ΩœÚŒ™≤ΩΩ¯∑ΩœÚ
 	{
-		if (x0 > x1) //Á°Æ‰øùx0<x1ÔºåËøôÊ†∑Âæ™ÁéØ‰∏≠x=x+1
+		if (x0 > x1) //»∑±£x0<x1£¨’‚—˘—≠ª∑÷–x=x+1
 		{
 			swap(x0, x1);
 			swap(y0, y1);
@@ -26,9 +26,9 @@ void line(int x0, int y0, int x1, int y1)
 		int d2 = -2 * dy;
 		int x = x0;
 		int y = y0;
-		int yIncr = (y1 > y0) ? 1 : -1; // ÊØîËæÉ‰∏§Á´ØÁÇπyÂÄºÂ§ßÂ∞èÂÜ≥ÂÆöyÁöÑÂ¢ûÈáèÂÄº
+		int yIncr = (y1 > y0) ? 1 : -1; // ±»Ωœ¡Ω∂Àµ„y÷µ¥Û–°æˆ∂®yµƒ‘ˆ¡ø÷µ
 		glVertex2i(x, y);
-		for (int x = x0+1; x <= x1; x++)
+		for (int x = x0 + 1; x <= x1; x++)
 		{
 			if (d < 0)
 			{
@@ -41,7 +41,7 @@ void line(int x0, int y0, int x1, int y1)
 			glVertex2i(x, y);
 		}
 	}
-	else 
+	else
 	{
 		if (y0 > y1)
 		{
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(800, 600);
-	glutCreateWindow("Hello Point!");
+	glutCreateWindow("Hello Line!");
 	Init();
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myReshape);
