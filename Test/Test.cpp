@@ -1,96 +1,85 @@
-﻿#include  <GL/glut.h> 
-#include <algorithm> 
-
+﻿// 提示：写完代码请保存之后再进行评测
+#include<windows.h>
+#include <GL/glut.h>
+#include <GL/glu.h>
+#include <algorithm>
+#include <stdio.h>
+#include <math.h>
 using namespace std;
 
-void line(int x0, int y0, int x1, int y1)
+
+void Line(int x1, int y1, int xn, int yn)
 {
-	// Please add the code here
+	// 请在此添加你的代码
 	/********** Begin ********/
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glBegin(GL_POINTS);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
 	glPointSize(1);
 
-	int dx = abs(x1 - x0);
-	int dy = abs(y1 - y0);
-	if(dx > dy) // x方向为步进方向
-	{
-		if (x0 > x1) //确保x0<x1，这样循环中x=x+1
-		{
-			swap(x0, x1);
-			swap(y0, y1);
-		}
+	/* 原来网上的代码 **未通过**
+	int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
+	int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1;
+	int err = dx + dy, e2;
 
-		int d = dx - 2 * dy;
-		int d1 = 2 * dx - 2 * dy;
-		int d2 = -2 * dy;
-		int x = x0;
-		int y = y0;
-		int yIncr = (y1 > y0) ? 1 : -1; // 比较两端点y值大小决定y的增量值
-		glVertex2i(x, y);
-		for (int x = x0+1; x <= x1; x++)
-		{
-			if (d < 0)
-			{
-				y = y + yIncr;
-				d = d + d1;
-			}
-			else
-				d = d + d2;
-
-			glVertex2i(x, y);
-		}
+	for (;;){  //循环
+		glBegin(GL_POINTS);
+		glPointSize(1); //点的大小为一个像素
+		glVertex2i(x0, y0); //(x, y)为点的坐标
+		glEnd();
+		if (x0 == x1 && y0 == y1) break;
+		e2 = 2 * err;
+		if (e2 >= dy) { err += dy; x0 += sx; }
+		if (e2 <= dx) { err += dx; y0 += sy; }
 	}
-	else 
-	{
-		if (y0 > y1)
-		{
-			swap(x0, x1);
-			swap(y0, y1);
-		}
 
-		int d = dy - 2 * dx;
-		int d1 = 2 * dy - 2 * dx;
-		int d2 = -2 * dx;
-		int x = x0;
-		int y = y0;
-		int xIncr = (x1 > x0) ? 1 : -1;
-		glVertex2i(x, y);
-		for (int y = y0 + 1; y <= y1; y++)
-		{
-			if (d < 0)
-			{
-				x = x + xIncr;
-				d = d + d1;
-			}
-			else
-				d = d + d2;
+	*/
 
-			glVertex2i(x, y);
-		}
+
+	//DDA
+	int dm = 0;
+	if (abs(xn - x1) >= abs(yn - y1))
+		dm = abs(xn - x1);//斜率绝对值<1，以x确定步长
+	else
+		dm = abs(yn - y1);//斜率绝对值>1，以y确定步长
+	float dx = (float)(xn - x1) / dm;
+	//当x是步长方向时，dx=1，也就是在x轴的步长是1
+	//如果x为负方向，那么dx=-1
+	float dy = (float)(yn - y1) / dm;
+	float x = x1;
+	float y = y1;
+	for (int i = 0; i < dm; i++) {
+
+		glBegin(GL_POINTS);
+		glPointSize(1); //点的大小为一个像素
+		glVertex2i((int)(x + 0.5), (int)(y + 0.5)); //(x, y)为点的坐标
+		glEnd();
+
+		x += dx;//如果是以x步长，进行绘制。
+			  //绘制的时候dx的符号决定朝正方向还是负方向绘制。
+		y += dy;
 	}
-	glEnd();
-	/********** End *********/
+
+	//太难了，代码经由参考，请见谅。
+   /********** End **********/
 }
 
 void myDisplay(void)
 {
+
 	glClear(GL_COLOR_BUFFER_BIT);
-	line(261, 215, 344, 275);
-	line(344, 275, 429, 213);
-	line(429, 213, 398, 319);
-	line(398, 319, 477, 384);
+	// 请在此添加你的代码用来测试直线绘制代码
+	/********** Begin ********/
 
-	line(477, 384, 378, 385);
-	line(378, 385, 344, 491);
-	line(344, 491, 310, 384);
-	line(310, 384, 209, 382);
+	int ab[30] = { 0,261, 215, 344, 275,429, 213, 398, 319, 477, 384, 378, 385,344, 491, 310, 384, 209, 382, 292, 319 };
+	for (int i = 1; i <= 9; i++) {
+		Line(ab[i * 2 - 1], ab[i * 2], ab[i * 2 + 1], ab[i * 2 + 2]);
+	}
+	Line(292, 319, 261, 215);
 
-	line(209, 382, 292, 319);
-	line(292, 319, 261, 215);
+
+	/********** End **********/
 	glFlush();
 }
-
 void Init()
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -106,14 +95,18 @@ void myReshape(int w, int h)
 
 int main(int argc, char *argv[])
 {
+	int width = 800;
+	int height = 600;
+
 	glutInit(&argc, argv);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("Hello Point!");
+	glutInitWindowSize(width, height);
+	glutCreateWindow("Hello Line!");
 	Init();
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myReshape);
 	glutMainLoop();
+
 
 	return 0;
 }
