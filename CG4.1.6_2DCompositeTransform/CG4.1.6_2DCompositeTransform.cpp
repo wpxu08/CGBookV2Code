@@ -11,9 +11,9 @@ void init(void)
 void triangle()
 {
 	glBegin(GL_TRIANGLES);
-		glVertex2f(0.0, 0.0);
-		glVertex2f(100.0, 0.0);
-		glVertex2f(0.0, 170.0);
+	glVertex2f(100.0, 100.0);
+	glVertex2f(200.0, 100.0);
+	glVertex2f(100.0, 270.0);
 	glEnd();
 }
 
@@ -23,24 +23,12 @@ void myDisplay()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); 	//清空变换矩阵为单位矩阵，恢复原始坐标系环境
 
-	/* 显示变换前几何对象 */
 	glColor3f(1.0, 0.0, 0.0);
 	triangle();
-	//glPushMatrix();
 
-	//glTranslatef(150, 0, 0);
-	//glRotatef(30, 0, 0, 1);
-
+	glTranslatef(100, 100, 0);
 	glRotatef(30, 0, 0, 1);
-	glTranslatef(150, 0, 0);
-
-	glColor3f(0.0, 1.0, 0.0);
-	triangle();
-
-	glLoadIdentity();
-	//glPopMatrix();
-	glTranslatef(150, 0, 0);
-	glRotatef(30, 0, 0, 1);
+	glTranslatef(-100, -100, 0);
 
 	glColor3f(0.0, 1.0, 0.0);
 	triangle();
